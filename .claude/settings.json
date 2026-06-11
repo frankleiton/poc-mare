@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm run build)",
+      "PowerShell(npm run preview -- --port 4173)",
+      "PowerShell(npx vite preview --port 4173)"
+    ]
+  }
+}
