@@ -10,7 +10,7 @@ import AirIcon from "@mui/icons-material/Air";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import type { OndaDia, DadoOnda } from "@/types/cptec";
 import { agitationColor, direcaoParaGraus } from "@/utils/weatherIcons";
-import { formatarDataCurta, mapaUnidade } from "@/utils/format";
+import { converteUnidade, formatarDataCurta, mapaUnidade } from "@/utils/format";
 import SectionHeader from "./SectionHeader";
 import { useLocation } from "@/context/LocationContext";
 
@@ -94,7 +94,7 @@ export default function OceanForecastSection({ dias }: { dias: OndaDia[] }) {
                   <Stack direction="row" spacing={0.25} alignItems="center">
                     <AirIcon sx={{ fontSize: 16 }} color="action" />
                     <Typography variant="caption">
-                      {resumo.ventoMedio} {mapaUnidade(unidade ?? "MS")}
+                     {converteUnidade(resumo.ventoMedio, unidade ?? "MS")} {} {mapaUnidade(unidade ?? "MS")}
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={0.25} alignItems="center">
