@@ -1,19 +1,16 @@
-import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import Skeleton from '@mui/material/Skeleton'
-import Box from '@mui/material/Box'
-import { useLocation } from '@/context/LocationContext'
-import {
-  usePrevisaoClima,
-  usePrevisaoOndas,
-} from '@/hooks/useWeatherQueries'
-import { CptecApiError } from '@/api/cptec'
-import LocationPrompt from '@/components/LocationPrompt'
-import CurrentWeatherCard from '@/components/CurrentWeatherCard'
-import ForecastSection from '@/components/ForecastSection'
-import CurrentOceanCard from '@/components/CurrentOceanCard'
-import OceanForecastSection from '@/components/OceanForecastSection'
-import { ErrorView, InfoView, LoadingView } from '@/components/StateViews'
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Skeleton from "@mui/material/Skeleton";
+import Box from "@mui/material/Box";
+import { useLocation } from "@/context/LocationContext";
+import { usePrevisaoClima, usePrevisaoOndas } from "@/hooks/useWeatherQueries";
+import { CptecApiError } from "@/api/cptec";
+import LocationPrompt from "@/components/LocationPrompt";
+import CurrentWeatherCard from "@/components/CurrentWeatherCard";
+import ForecastSection from "@/components/ForecastSection";
+import CurrentOceanCard from "@/components/CurrentOceanCard";
+import OceanForecastSection from "@/components/OceanForecastSection";
+import { ErrorView, InfoView, LoadingView } from "@/components/StateViews";
 
 function DashboardSkeleton() {
   return (
@@ -21,9 +18,9 @@ function DashboardSkeleton() {
       <Skeleton variant="rounded" height={220} />
       <Box
         sx={{
-          display: 'grid',
+          display: "grid",
           gap: 2,
-          gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(5, 1fr)' },
+          gridTemplateColumns: { xs: "repeat(2, 1fr)", md: "repeat(5, 1fr)" },
         }}
       >
         {Array.from({ length: 5 }).map((_, i) => (
@@ -31,17 +28,17 @@ function DashboardSkeleton() {
         ))}
       </Box>
     </Stack>
-  )
+  );
 }
 
 export default function HomePage() {
-  const { cidade } = useLocation()
+  const { cidade } = useLocation();
 
-  const clima = usePrevisaoClima(cidade?.id)
-  const ondas = usePrevisaoOndas(cidade?.id)
+  const clima = usePrevisaoClima(cidade?.id);
+  const ondas = usePrevisaoOndas(cidade?.id);
 
   if (!cidade) {
-    return <LocationPrompt />
+    return <LocationPrompt />;
   }
 
   return (
@@ -55,7 +52,7 @@ export default function HomePage() {
             description={
               clima.error instanceof CptecApiError
                 ? clima.error.message
-                : 'Tente novamente em instantes.'
+                : "Tente novamente em instantes."
             }
             onRetry={() => clima.refetch()}
           />
@@ -72,7 +69,9 @@ export default function HomePage() {
 
       {/* Oceano */}
       <section>
-        {ondas.isLoading && <LoadingView label="Carregando previsão do mar..." />}
+        {ondas.isLoading && (
+          <LoadingView label="Carregando previsão do mar..." />
+        )}
         {ondas.isError && (
           <InfoView
             title="Previsão oceânica indisponível"
@@ -93,5 +92,5 @@ export default function HomePage() {
         )}
       </section>
     </Stack>
-  )
+  );
 }

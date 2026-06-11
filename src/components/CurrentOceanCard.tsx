@@ -1,39 +1,40 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
-import Tooltip from '@mui/material/Tooltip'
-import WavesIcon from '@mui/icons-material/Waves'
-import AirIcon from '@mui/icons-material/Air'
-import NavigationIcon from '@mui/icons-material/Navigation'
-import HeightIcon from '@mui/icons-material/Height'
-import ScheduleIcon from '@mui/icons-material/Schedule'
-import type { OndaDia } from '@/types/cptec'
-import { agitationColor, direcaoParaGraus } from '@/utils/weatherIcons'
-import { formatarDataLonga } from '@/utils/format'
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
+import WavesIcon from "@mui/icons-material/Waves";
+import AirIcon from "@mui/icons-material/Air";
+import NavigationIcon from "@mui/icons-material/Navigation";
+import HeightIcon from "@mui/icons-material/Height";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import type { OndaDia } from "@/types/cptec";
+import { agitationColor, direcaoParaGraus } from "@/utils/weatherIcons";
+import {
+  converteUnidade,
+  formatarDataLonga,
+  mapaUnidade,
+} from "@/utils/format";
+import { useLocation } from "@/context/LocationContext";
 
 function DirecaoSeta({ direcao }: { direcao: string }) {
-  const deg = direcaoParaGraus(direcao)
+  const deg = direcaoParaGraus(direcao);
   return (
     <NavigationIcon
       fontSize="small"
-      sx={{ transform: `rotate(${deg}deg)`, color: 'primary.main' }}
+      sx={{ transform: `rotate(${deg}deg)`, color: "primary.main" }}
     />
-  )
+  );
 }
 
 export default function CurrentOceanCard({ dia }: { dia: OndaDia }) {
+  const { unidade } = useLocation();
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={1}
-          sx={{ mb: 0.5 }}
-        >
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
           <WavesIcon color="secondary" />
           <Typography variant="h6">Condições do mar — hoje</Typography>
         </Stack>
@@ -43,21 +44,21 @@ export default function CurrentOceanCard({ dia }: { dia: OndaDia }) {
 
         <Stack spacing={1.5} sx={{ mt: 2 }}>
           {dia.dados_ondas.map((onda, idx) => {
-            const cor = agitationColor(onda.agitation)
+            const cor = agitationColor(onda.agitation);
             return (
               <Box
                 key={`${onda.hora}-${idx}`}
                 sx={{
-                  display: 'grid',
+                  display: "grid",
                   gridTemplateColumns: {
-                    xs: '64px 1fr',
-                    sm: '80px 1fr auto',
+                    xs: "64px 1fr",
+                    sm: "80px 1fr auto",
                   },
-                  alignItems: 'center',
+                  alignItems: "center",
                   gap: 1.5,
                   p: 1.5,
                   borderRadius: 2,
-                  bgcolor: 'action.hover',
+                  bgcolor: "action.hover",
                 }}
               >
                 <Stack direction="row" spacing={0.5} alignItems="center">
@@ -70,7 +71,7 @@ export default function CurrentOceanCard({ dia }: { dia: OndaDia }) {
                 <Stack
                   direction="row"
                   spacing={2}
-                  sx={{ flexWrap: 'wrap', gap: 1 }}
+                  sx={{ flexWrap: "wrap", gap: 1 }}
                 >
                   <Tooltip title="Altura da onda">
                     <Stack direction="row" spacing={0.5} alignItems="center">
@@ -91,12 +92,13 @@ export default function CurrentOceanCard({ dia }: { dia: OndaDia }) {
                     </Stack>
                   </Tooltip>
                   <Tooltip
-                    title={`Vento: ${onda.vento} m/s · ${onda.direcao_vento_desc ?? onda.direcao_vento}`}
+                    title={`Vento: ${onda.vento} ${mapaUnidade(unidade ?? "MS")} · ${onda.direcao_vento_desc ?? onda.direcao_vento}`}
                   >
                     <Stack direction="row" spacing={0.5} alignItems="center">
                       <AirIcon fontSize="small" color="action" />
                       <Typography variant="body2">
-                        {onda.vento} m/s {onda.direcao_vento}
+                        {converteUnidade(onda.vento, unidade ?? "MS")}{" "}
+                        {mapaUnidade(unidade ?? "MS")} {onda.direcao_vento}
                       </Typography>
                     </Stack>
                   </Tooltip>
@@ -109,15 +111,15 @@ export default function CurrentOceanCard({ dia }: { dia: OndaDia }) {
                     color: cor,
                     bgcolor: `${cor}1a`,
                     fontWeight: 600,
-                    justifySelf: { xs: 'start', sm: 'end' },
-                    gridColumn: { xs: '2', sm: 'auto' },
+                    justifySelf: { xs: "start", sm: "end" },
+                    gridColumn: { xs: "2", sm: "auto" },
                   }}
                 />
               </Box>
-            )
+            );
           })}
         </Stack>
       </CardContent>
     </Card>
-  )
+  );
 }

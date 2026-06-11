@@ -1,15 +1,15 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Link from '@mui/material/Link'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import WbSunnyIcon from '@mui/icons-material/WbSunny'
-import WavesIcon from '@mui/icons-material/Waves'
-import StorageIcon from '@mui/icons-material/Storage'
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import WavesIcon from "@mui/icons-material/Waves";
+import StorageIcon from "@mui/icons-material/Storage";
 
 export default function AboutPage() {
   return (
@@ -18,10 +18,14 @@ export default function AboutPage() {
         <Stack spacing={2}>
           <Typography variant="h4">Sobre o Mare</Typography>
           <Typography color="text.secondary">
-            Mare é uma POC que consome a API pública do CPTEC/INPE através da{' '}
-            <Link href="https://brasilapi.com.br/" target="_blank" rel="noopener">
+            Mare é uma POC que consome a API pública do CPTEC/INPE através da{" "}
+            <Link
+              href="https://brasilapi.com.br/"
+              target="_blank"
+              rel="noopener"
+            >
               BrasilAPI
-            </Link>{' '}
+            </Link>{" "}
             para exibir condições meteorológicas e oceânicas das cidades
             brasileiras.
           </Typography>
@@ -58,5 +62,5 @@ export default function AboutPage() {
         </Stack>
       </CardContent>
     </Card>
-  )
+  );
 }

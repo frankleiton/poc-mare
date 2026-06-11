@@ -1,13 +1,13 @@
-import type { ReactNode } from 'react'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+import type { ReactNode } from "react";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 interface SectionHeaderProps {
-  icon: ReactNode
-  title: string
-  subtitle?: string
-  action?: ReactNode
+  icon: ReactNode;
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
 }
 
 export default function SectionHeader({
@@ -36,5 +36,5 @@ export default function SectionHeader({
       </Box>
       {action}
     </Stack>
-  )
+  );
 }

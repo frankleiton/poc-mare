@@ -1,46 +1,47 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
-import SailingIcon from '@mui/icons-material/Sailing'
-import WavesIcon from '@mui/icons-material/Waves'
-import AirIcon from '@mui/icons-material/Air'
-import NavigationIcon from '@mui/icons-material/Navigation'
-import type { OndaDia, DadoOnda } from '@/types/cptec'
-import { agitationColor, direcaoParaGraus } from '@/utils/weatherIcons'
-import { formatarDataCurta } from '@/utils/format'
-import SectionHeader from './SectionHeader'
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import SailingIcon from "@mui/icons-material/Sailing";
+import WavesIcon from "@mui/icons-material/Waves";
+import AirIcon from "@mui/icons-material/Air";
+import NavigationIcon from "@mui/icons-material/Navigation";
+import type { OndaDia, DadoOnda } from "@/types/cptec";
+import { agitationColor, direcaoParaGraus } from "@/utils/weatherIcons";
+import { formatarDataCurta, mapaUnidade } from "@/utils/format";
+import SectionHeader from "./SectionHeader";
+import { useLocation } from "@/context/LocationContext";
 
-const ORDEM_AGITACAO = ['fraco', 'moderado', 'forte', 'muito forte']
+const ORDEM_AGITACAO = ["fraco", "moderado", "forte", "muito forte"];
 
 /** Resume um dia: maior onda + agitação mais severa + vento médio. */
 function resumoDia(dia: OndaDia) {
-  const dados = dia.dados_ondas
-  if (dados.length === 0) return null
+  const dados = dia.dados_ondas;
+  if (dados.length === 0) return null;
 
-  const alturaMax = Math.max(...dados.map((d) => d.altura_onda))
-  const ventoMedio =
-    dados.reduce((acc, d) => acc + d.vento, 0) / dados.length
+  const alturaMax = Math.max(...dados.map((d) => d.altura_onda));
+  const ventoMedio = dados.reduce((acc, d) => acc + d.vento, 0) / dados.length;
 
   const maisSevero = dados.reduce<DadoOnda>((pior, atual) => {
-    const ip = ORDEM_AGITACAO.indexOf(pior.agitation.toLowerCase())
-    const ia = ORDEM_AGITACAO.indexOf(atual.agitation.toLowerCase())
-    return ia > ip ? atual : pior
-  }, dados[0])
+    const ip = ORDEM_AGITACAO.indexOf(pior.agitation.toLowerCase());
+    const ia = ORDEM_AGITACAO.indexOf(atual.agitation.toLowerCase());
+    return ia > ip ? atual : pior;
+  }, dados[0]);
 
   return {
     alturaMax,
     ventoMedio: Math.round(ventoMedio * 10) / 10,
     agitacao: maisSevero.agitation,
     direcaoOnda: maisSevero.direcao_onda,
-  }
+  };
 }
 
 export default function OceanForecastSection({ dias }: { dias: OndaDia[] }) {
-  const proximos = dias.slice(1, 6)
-  if (proximos.length === 0) return null
+  const proximos = dias.slice(1, 6);
+  const { unidade } = useLocation();
+  if (proximos.length === 0) return null;
 
   return (
     <Box>
@@ -51,30 +52,30 @@ export default function OceanForecastSection({ dias }: { dias: OndaDia[] }) {
       />
       <Box
         sx={{
-          display: 'grid',
+          display: "grid",
           gap: 2,
           gridTemplateColumns: {
-            xs: 'repeat(2, 1fr)',
-            sm: 'repeat(3, 1fr)',
-            md: 'repeat(5, 1fr)',
+            xs: "repeat(2, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(5, 1fr)",
           },
         }}
       >
         {proximos.map((dia) => {
-          const resumo = resumoDia(dia)
-          if (!resumo) return null
-          const cor = agitationColor(resumo.agitacao)
-          const deg = direcaoParaGraus(resumo.direcaoOnda)
+          const resumo = resumoDia(dia);
+          if (!resumo) return null;
+          const cor = agitationColor(resumo.agitacao);
+          const deg = direcaoParaGraus(resumo.direcaoOnda);
           return (
             <Card key={dia.data} variant="outlined">
               <CardContent
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
                   gap: 1,
-                  '&:last-child': { pb: 2 },
+                  "&:last-child": { pb: 2 },
                 }}
               >
                 <Typography variant="subtitle2" color="text.secondary">
@@ -93,14 +94,14 @@ export default function OceanForecastSection({ dias }: { dias: OndaDia[] }) {
                   <Stack direction="row" spacing={0.25} alignItems="center">
                     <AirIcon sx={{ fontSize: 16 }} color="action" />
                     <Typography variant="caption">
-                      {resumo.ventoMedio} m/s
+                      {resumo.ventoMedio} {mapaUnidade(unidade ?? "MS")}
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={0.25} alignItems="center">
                     <NavigationIcon
                       sx={{
                         fontSize: 16,
-                        color: 'primary.main',
+                        color: "primary.main",
                         transform: `rotate(${deg}deg)`,
                       }}
                     />
@@ -111,9 +112,9 @@ export default function OceanForecastSection({ dias }: { dias: OndaDia[] }) {
                 </Stack>
               </CardContent>
             </Card>
-          )
+          );
         })}
       </Box>
     </Box>
-  )
+  );
 }

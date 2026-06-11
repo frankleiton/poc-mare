@@ -58,3 +58,6 @@ export interface CidadeSelecionada {
   nome: string
   estado: string
 }
+
+// Unidades de medida disponíveis no CPTEC. A API é inconsistente e às vezes retorna "MS" (metros por segundo) e às vezes "MKS" (sistema métrico, ou seja, m/s). Ambas significam a mesma coisa. "NOS" é nós e "KTS" é nós na escala Beaufort.
+export type Unidade = 'MS' | 'NOS' | 'MKS' | 'KTS' | 'KMH'

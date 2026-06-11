@@ -1,30 +1,39 @@
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import { alpha, useTheme } from '@mui/material/styles'
-import WavesIcon from '@mui/icons-material/Waves'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { useLocation } from '@/context/LocationContext'
-import CitySelector from './CitySelector'
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import { alpha, useTheme } from "@mui/material/styles";
+import WavesIcon from "@mui/icons-material/Waves";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useLocation } from "@/context/LocationContext";
+import CitySelector from "./CitySelector";
+import UnitsSelector from "./UnitsSelector";
 
 export default function Header() {
-  const theme = useTheme()
-  const { cidade, definirCidade, limparCidade } = useLocation()
+  const theme = useTheme();
+  const { cidade, definirCidade, limparCidade, unidade, setUnidade } =
+    useLocation();
 
   return (
     <AppBar
       position="sticky"
       sx={{
         bgcolor: alpha(theme.palette.primary.dark, 0.96),
-        backdropFilter: 'blur(6px)',
-        borderBottom: `1px solid ${alpha('#fff', 0.12)}`,
+        backdropFilter: "blur(6px)",
+        borderBottom: `1px solid ${alpha("#fff", 0.12)}`,
       }}
     >
-      <Toolbar sx={{ gap: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' }, py: 1 }}>
+      <Toolbar
+        sx={{
+          gap: 2,
+          flexWrap: { xs: "wrap", sm: "nowrap" },
+          py: 1,
+          justifyContent: "space-between",
+        }}
+      >
         <Stack direction="row" alignItems="center" spacing={1.2}>
           <WavesIcon />
           <Box>
@@ -37,48 +46,82 @@ export default function Header() {
           </Box>
         </Stack>
 
-        <Box sx={{ flexGrow: 1, minWidth: { xs: '100%', sm: 'auto' } }} />
-
-        {/* Seletor de cidade no menu superior */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            width: { xs: '100%', sm: 'auto' },
-            '& .MuiOutlinedInput-root': {
-              bgcolor: alpha('#fff', 0.14),
-              color: 'common.white',
-            },
-            '& .MuiInputLabel-root, & .MuiSvgIcon-root': {
-              color: alpha('#fff', 0.85),
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: alpha('#fff', 0.3),
-            },
-          }}
+        <Stack
+          direction="row"
+          width={{ xs: "100%", md: "auto" }}
+          alignItems="center"
+          gap={2}
         >
-          <CitySelector
-            value={cidade}
-            onChange={(c) => c && definirCidade(c)}
-            label="Trocar cidade"
-            dense
-            fullWidth={false}
-          />
-          {cidade && (
-            <Tooltip title="Limpar cidade salva">
-              <IconButton
-                color="inherit"
-                onClick={limparCidade}
-                size="small"
-                aria-label="limpar cidade"
-              >
-                <DeleteOutlineIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
+          {/* Seletor de cidade no menu superior */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              width: { xs: "100%", sm: "auto" },
+              "& .MuiOutlinedInput-root": {
+                bgcolor: alpha("#fff", 0.14),
+                color: "common.white",
+              },
+              "& .MuiInputLabel-root, & .MuiSvgIcon-root": {
+                color: alpha("#fff", 0.85),
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#fff", 0.3),
+              },
+            }}
+          >
+            <CitySelector
+              value={cidade}
+              onChange={(c) => c && definirCidade(c)}
+              label="Trocar cidade"
+              dense
+              fullWidth={false}
+            />
+            {cidade && (
+              <Tooltip title="Limpar cidade salva">
+                <IconButton
+                  color="inherit"
+                  onClick={limparCidade}
+                  size="small"
+                  aria-label="limpar cidade"
+                >
+                  <DeleteOutlineIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: { xs: "122px", md: "150px" },
+              "& .MuiOutlinedInput-root": {
+                bgcolor: alpha("#fff", 0.14),
+                color: "common.white",
+              },
+              "& .MuiInputLabel-root, & .MuiSvgIcon-root": {
+                color: alpha("#fff", 0.85),
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#fff", 0.3),
+              },
+              "& .MuiAutocomplete-root": {
+                minWidth: { xs: "122px", md: "150px" },
+              },
+            }}
+          >
+            <UnitsSelector
+              value={unidade}
+              onChange={setUnidade}
+              label="Unidades"
+              dense
+              fullWidth={false}
+            />
+          </Box>
+        </Stack>
       </Toolbar>
     </AppBar>
-  )
+  );
 }

@@ -1,10 +1,6 @@
-import type {
-  Cidade,
-  PrevisaoClima,
-  PrevisaoOndas,
-} from '@/types/cptec'
+import type { Cidade, PrevisaoClima, PrevisaoOndas } from "@/types/cptec";
 
-const BASE_URL = 'https://brasilapi.com.br/api/cptec/v1'
+const BASE_URL = "https://brasilapi.com.br/api/cptec/v1";
 
 /** Erro de domínio para falhas vindas da API. */
 export class CptecApiError extends Error {
@@ -12,35 +8,35 @@ export class CptecApiError extends Error {
     message: string,
     readonly status?: number,
   ) {
-    super(message)
-    this.name = 'CptecApiError'
+    super(message);
+    this.name = "CptecApiError";
   }
 }
 
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
-  let response: Response
+  let response: Response;
   try {
-    response = await fetch(`${BASE_URL}${path}`, { signal })
+    response = await fetch(`${BASE_URL}${path}`, { signal });
   } catch (err) {
-    if ((err as Error).name === 'AbortError') throw err
+    if ((err as Error).name === "AbortError") throw err;
     throw new CptecApiError(
-      'Não foi possível conectar à BrasilAPI. Verifique sua conexão.',
-    )
+      "Não foi possível conectar à BrasilAPI. Verifique sua conexão.",
+    );
   }
 
   if (!response.ok) {
     throw new CptecApiError(
       `Falha ao consultar a BrasilAPI (HTTP ${response.status}).`,
       response.status,
-    )
+    );
   }
 
-  return (await response.json()) as T
+  return (await response.json()) as T;
 }
 
 /** Lista todas as cidades disponíveis no CPTEC. */
 export function listarCidades(signal?: AbortSignal): Promise<Cidade[]> {
-  return request<Cidade[]>('/cidade', signal)
+  return request<Cidade[]>("/cidade", signal);
 }
 
 /**
@@ -55,12 +51,12 @@ export async function obterCidade(
     return await request<Cidade[]>(
       `/cidade/${encodeURIComponent(cityName)}`,
       signal,
-    )
+    );
   } catch (err) {
     if (err instanceof CptecApiError && err.status === 404) {
-      return []
+      return [];
     }
-    throw err
+    throw err;
   }
 }
 
@@ -73,11 +69,11 @@ export function obterPrevisaoClima(
   dias = 6,
   signal?: AbortSignal,
 ): Promise<PrevisaoClima> {
-  const clamped = Math.min(Math.max(dias, 1), 6)
+  const clamped = Math.min(Math.max(dias, 1), 6);
   return request<PrevisaoClima>(
     `/clima/previsao/${cityCode}/${clamped}`,
     signal,
-  )
+  );
 }
 
 /**
@@ -89,6 +85,6 @@ export function obterPrevisaoOndas(
   dias = 6,
   signal?: AbortSignal,
 ): Promise<PrevisaoOndas> {
-  const clamped = Math.min(Math.max(dias, 1), 6)
-  return request<PrevisaoOndas>(`/ondas/${cityCode}/${clamped}`, signal)
+  const clamped = Math.min(Math.max(dias, 1), 6);
+  return request<PrevisaoOndas>(`/ondas/${cityCode}/${clamped}`, signal);
 }
